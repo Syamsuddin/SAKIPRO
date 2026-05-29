@@ -1,0 +1,33 @@
+name: Build Windows Executable
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Set up Python
+        run: uv python install
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Build executable using PyInstaller
+        run: uv run pyinstaller sakipro.spec --clean --noconfirm
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SAKIPRO-Windows-Build
+          path: dist/sakipro/
