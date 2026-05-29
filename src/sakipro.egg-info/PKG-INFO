@@ -1,0 +1,156 @@
+Metadata-Version: 2.4
+Name: sakipro
+Version: 1.0.0
+Summary: AI Agent SAKIPRO CLI - Review & Optimize SAKIP Documents
+Author-email: Syamsuddin Ideris <syamsuddin.ideris@gmail.com>
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+Requires-Dist: typer>=0.12.3
+Requires-Dist: rich>=13.7.1
+Requires-Dist: prompt_toolkit>=3.0.43
+Requires-Dist: questionary>=2.0.1
+Requires-Dist: litellm>=1.35.0
+Requires-Dist: pydantic>=2.7.0
+Requires-Dist: pydantic-settings>=2.2.1
+Requires-Dist: python-dotenv>=1.0.1
+Requires-Dist: sqlalchemy>=2.0.29
+Requires-Dist: alembic>=1.13.1
+Requires-Dist: python-docx>=1.1.2
+Requires-Dist: docxtpl>=0.17.0
+Requires-Dist: pymupdf>=1.24.1
+Requires-Dist: pdfplumber>=0.11.0
+Requires-Dist: openpyxl>=3.1.2
+Requires-Dist: pandas>=2.2.2
+Requires-Dist: markdown>=3.6
+Requires-Dist: networkx>=3.0
+Requires-Dist: docxtpl>=0.16.0
+
+# SAKIPRO v1.0 🚀
+
+[![Python Version](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
+
+**SAKIPRO** (Sistem Akuntabilitas Kinerja Instansi Pemerintah Professional) adalah AI-Powered CLI Agent yang dirancang khusus untuk mempermudah tugas Kasubbag Perencanaan / Tim Evaluator SAKIP di tingkat OPD (Organisasi Perangkat Daerah). SAKIPRO memanfaatkan kecerdasan buatan (LLM) untuk membaca, menganalisis, dan mengevaluasi dokumen perencanaan dan pelaporan secara otomatis.
+
+---
+
+## 🎯 Fitur Utama
+
+- 📂 **Smart Folder Scanner (`/scan`)**: Mengekstrak teks dari berbagai format dokumen (PDF, DOCX, XLSX, TXT) ke dalam *database* lokal (SQLite FTS5) tanpa bergantung pada *cloud embedding* (100% aman untuk laptop kantor).
+- 📊 **Indicator Reviewer (`/cek-indikator`)**: Meninjau kelayakan dan orientasi Indikator Kinerja Utama (IKU) agar sesuai kaidah berorientasi hasil (*outcome*).
+- 📝 **PK & Renstra Reviewer (`/review-pk`, `/review-renstra`)**: Memvalidasi kesesuaian Perjanjian Kinerja (PK) dan Rencana Strategis (Renstra).
+- 📈 **LKjIP & Evidence Reviewer (`/review-lkjip`, `/cek-evidence`)**: Melakukan tabulasi silang antara laporan capaian dengan ketersediaan/relevansi bukti fisik (Evidence).
+- 🌲 **Cascading Verifier (`/cek-cascading`)**: Menguji keselarasan pohon kinerja (*cascading*) dari level Sasaran Strategis hingga ke level Sub-kegiatan.
+- ✍️ **AI Drafter (`/draft`)**: Memberikan usulan/saran perbaikan redaksional (teks) yang lebih tajam dan terukur.
+- 📑 **Final Report Generator (`/report`)**: Merangkum hasil temuan dari seluruh agen menjadi format Draf Laporan Hasil Evaluasi (LHE).
+- 💾 **Auto-Export**: Mengekspor otomatis seluruh temuan agen ke dalam format **Markdown** dan **Microsoft Word (.docx)**.
+
+---
+
+## 💻 Kebutuhan Sistem
+
+- OS: **Windows 10/11**, **macOS**, atau **Linux**
+- RAM: Minimal **8 GB**
+- CPU: **Dual-Core / Quad-Core** standar laptop kantor
+- Internet: **Dibutuhkan** (untuk panggilan API AI)
+- Python (Bila di-build dari source): **3.11 atau lebih baru**
+
+---
+
+## 🚀 Instalasi & Persiapan
+
+### 1. Mode Standalone / Executable (Direkomendasikan)
+Anda dapat menggunakan SAKIPRO tanpa menginstal Python menggunakan *pre-built binaries*.
+1. Unduh *file* zip SAKIPRO untuk sistem operasi Anda melalui halaman [Releases](#).
+2. Ekstrak folder tersebut (misal: di desktop Anda).
+3. Salin file `.env.example` menjadi `.env` lalu masukkan *API Key* Anda:
+   ```ini
+   SAKIPRO_AI_PROVIDER=anthropic
+   ANTHROPIC_API_KEY=sk-ant-...
+   ```
+4. Jalankan aplikasi via terminal/command prompt:
+   - **Mac/Linux:** `./sakipro`
+   - **Windows:** `.\sakipro.exe`
+
+### 2. Mode Developer (Dari Source Code)
+Jika Anda adalah *developer* yang ingin mengembangkan SAKIPRO, ikuti langkah berikut:
+
+```bash
+# 1. Clone repository
+git clone https://github.com/username/sakipro.git
+cd sakipro
+
+# 2. Buat virtual environment dan install dependencies
+python3 -m venv .venv
+source .venv/bin/activate  # Untuk Windows: .venv\Scripts\activate
+pip install -e .
+
+# 3. Konfigurasi kredensial AI
+cp .env.example .env
+# Edit .env dan masukkan API Key Anda (OpenAI, Anthropic, Gemini, dll)
+
+# 4. Jalankan aplikasi
+sakipro
+```
+
+---
+
+## 🛠 Panduan Penggunaan Singkat
+
+Saat SAKIPRO dijalankan, Anda akan disambut oleh **Interactive REPL (Read-Eval-Print Loop)** SAKIPRO. 
+Berikut adalah urutan kerja standar:
+
+1. **Pemindaian Dokumen**  
+   Ketik perintah berikut untuk memindai folder dokumen kerja Anda:
+   ```text
+   SAKIPRO> /scan /path/to/folder/Dokumen_SAKIP
+   ```
+   *SAKIPRO akan meng-index isi dokumen secara cerdas ke database SQLite lokal Anda.*
+
+2. **Jalankan Evaluasi (Audit)**  
+   Panggil agen spesialis sesuai tahap evaluasi yang diinginkan:
+   - `/cek-indikator` - Memeriksa redaksional IKU.
+   - `/review-pk` - Mengaudit Perjanjian Kinerja.
+   - `/cek-cascading` - Mengecek keselarasan pohon kinerja.
+   - `/cek-evidence` - Mengecek bukti fisik atas laporan kinerja.
+
+3. **Gunakan Agen Pendamping**  
+   - `/draft usulkan perbaikan indikator X agar lebih berorientasi hasil`
+   - `/report buatkan draf LHE dari hasil temuan di atas`
+
+4. **Ambil Hasil Laporan**  
+   Periksa folder `output/` yang dihasilkan secara otomatis. Laporan tersedia dalam ekstensi **.md** dan **.docx**.
+
+---
+
+## 🔒 Privasi dan Keamanan (Privacy By Design)
+
+SAKIPRO menyadari sensitivitas dokumen birokrasi pemerintahan:
+- **No Cloud Vector DB:** SAKIPRO tidak mengunggah seluruh dokumen Anda ke *vector database* awan. Ekstraksi (*parsing*) dan indeks penelusuran (FTS5) **sepenuhnya terjadi secara offline** di laptop Anda.
+- **Micro-Prompting:** SAKIPRO hanya mengirimkan potongan paragraf (chunk) teks spesifik ke LLM (seperti Anthropic atau OpenAI) yang relevan untuk proses *review*, bukan keseluruhan *file* mentah Anda.
+
+---
+
+## 🏗 Roadmap Pengembangan
+
+- [x] **v0.1**: Engine pemrosesan dokumen lokal & Database (FTS5).
+- [x] **v0.2**: Agent Utama (IKU & PK Reviewer).
+- [x] **v1.0**: *Expanded Agents* (Cascading, Evidence, LKjIP, Drafter, Report), DOCX Exporter, dan CLI REPL terpadu.
+- [ ] **Next**: Dukungan Audit Multi-Tahun, Task Board, Visualisasi Graf Pohon Kinerja.
+
+---
+
+## 🤝 Kontribusi
+
+Kami sangat menyambut kontribusi (*Pull Requests*, *Issues*, maupun *Discussions*) dari *developer* maupun praktisi pemerintahan untuk membuat SAKIPRO lebih baik lagi! 
+
+Mohon baca dokumen desain kami di `docs/AI_AGENT_TECHNICAL_DESIGN.md` untuk memahami pola arsitektur agen SAKIPRO sebelum mengembangkan fitur baru.
+
+---
+
+## 📜 Lisensi
+
+Aplikasi ini dirilis di bawah naungan lisensi **MIT License**. Lihat file `LICENSE` untuk informasi lebih lanjut.
+
+*Dibangun dengan ❤️ untuk mendorong birokrasi yang lebih berorientasi hasil dan akuntabel.*

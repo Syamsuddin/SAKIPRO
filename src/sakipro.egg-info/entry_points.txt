@@ -1,0 +1,2 @@
+[console_scripts]
+sakipro = sakipro.__main__:main

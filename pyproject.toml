@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sakipro"
+version = "1.0.0"
+description = "AI Agent SAKIPRO CLI - Review & Optimize SAKIP Documents"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+    { name = "Syamsuddin Ideris", email = "syamsuddin.ideris@gmail.com" }
+]
+dependencies = [
+    "typer>=0.12.3",
+    "rich>=13.7.1",
+    "prompt_toolkit>=3.0.43",
+    "questionary>=2.0.1",
+    "litellm>=1.35.0",
+    "pydantic>=2.7.0",
+    "pydantic-settings>=2.2.1",
+    "python-dotenv>=1.0.1",
+    "sqlalchemy>=2.0.29",
+    "alembic>=1.13.1",
+    "python-docx>=1.1.2",
+    "docxtpl>=0.17.0",
+    "pymupdf>=1.24.1",
+    "pdfplumber>=0.11.0",
+    "openpyxl>=3.1.2",
+    "pandas>=2.2.2",
+    "markdown>=3.6",
+    "networkx>=3.0",
+    "docxtpl>=0.16.0"
+]
+
+[project.scripts]
+sakipro = "sakipro.__main__:main"
