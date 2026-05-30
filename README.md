@@ -43,17 +43,30 @@
 ## 🚀 Instalasi & Persiapan
 
 ### 1. Mode Standalone / Executable (Direkomendasikan)
-Anda dapat menggunakan SAKIPRO tanpa menginstal Python menggunakan *pre-built binaries*.
-1. Unduh *file* zip SAKIPRO untuk sistem operasi Anda melalui halaman [Releases](#).
-2. Ekstrak folder tersebut (misal: di desktop Anda).
-3. Salin file `.env.example` menjadi `.env` lalu masukkan *API Key* Anda:
+Anda dapat menggunakan SAKIPRO tanpa perlu menginstal Python, melalui *pre-built binaries* yang dibuat otomatis oleh sistem GitHub.
+
+**A. Cara Mengunduh (Download)**
+- **Buka Halaman Actions**: Kunjungi tab **[Actions](https://github.com/Syamsuddin/SAKIPRO/actions)** di repositori ini.
+- **Pilih OS Anda**: 
+  - Untuk **Windows**: Klik workflow *Build Windows Executable*.
+  - Untuk **Linux**: Klik workflow *Build Linux Executable*.
+- **Unduh File**: Klik proses terbaru yang sukses (centang hijau), gulir ke bagian paling bawah (panel **Artifacts**), lalu klik *file* zip yang tersedia (misal: `SAKIPRO-Windows-Build` atau `SAKIPRO-Linux-Build`) untuk mengunduhnya.
+- **Untuk macOS**: *File* zip macOS dapat ditemukan di menu **Releases** jika sudah diunggah oleh *developer*, atau bisa di-*build* secara manual (lihat Mode Developer).
+
+**B. Cara Instalasi & Menjalankan**
+1. **Ekstrak** *file* zip SAKIPRO yang telah diunduh ke folder pilihan Anda (misal: Desktop).
+2. **Siapkan API Key**: SAKIPRO membutuhkan otak AI untuk bekerja. Salin/ubah *file* `.env.example` (atau buat *file* teks baru bernama `.env`) di dalam folder hasil ekstraksi, lalu masukkan kredensial Anda:
    ```ini
    SAKIPRO_AI_PROVIDER=anthropic
-   ANTHROPIC_API_KEY=sk-ant-...
+   ANTHROPIC_API_KEY=sk-ant-kunci-rahasia-anda
    ```
-4. Jalankan aplikasi via terminal/command prompt:
-   - **Mac/Linux:** `./sakipro`
-   - **Windows:** `.\sakipro.exe`
+3. **Berikan Hak Akses (Khusus Linux/macOS)**: Buka terminal di folder aplikasi tersebut, lalu jalankan:
+   ```bash
+   chmod +x sakipro
+   ```
+4. **Jalankan Aplikasi**:
+   - **Windows**: Klik ganda pada *file* `sakipro.exe`. (Jika muncul peringatan *Windows SmartScreen*, klik *More info* -> *Run anyway*).
+   - **Linux / macOS**: Buka terminal di folder tersebut dan jalankan perintah `./sakipro`.
 
 ### 2. Mode Developer (Dari Source Code)
 Jika Anda adalah *developer* yang ingin mengembangkan SAKIPRO, ikuti langkah berikut:
